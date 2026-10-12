@@ -10,6 +10,12 @@
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
 
+  <!-- Loading overlay — hidden once data.json is fetched -->
+  <div id="loading-overlay" class="loading-overlay" role="status" aria-live="polite">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <span>Loading dashboard data…</span>
+  </div>
+
   <!-- ===== HEADER ===== -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
@@ -45,7 +51,7 @@
         <div class="xl:col-span-1">
           <label class="filter-label">Jurisdiction</label>
           <div class="relative">
-            <button id="jur-dropdown-btn" class="filter-btn w-full text-left flex items-center justify-between" type="button">
+            <button id="jur-dropdown-btn" class="filter-btn w-full text-left flex items-center justify-between" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="jur-dropdown">
               <span id="jur-dropdown-text" class="truncate">All jurisdictions</span>
               <svg class="w-4 h-4 ml-1 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
@@ -62,9 +68,9 @@
         <div>
           <label class="filter-label">Tax Rate (€/t CO₂e)</label>
           <div class="flex items-center gap-2">
-            <input id="rate-min" type="number" min="0" placeholder="Min" class="filter-input w-full" />
-            <span class="text-gray-400 text-xs">–</span>
-            <input id="rate-max" type="number" min="0" placeholder="Max" class="filter-input w-full" />
+            <input id="rate-min" type="number" min="0" placeholder="Min" class="filter-input w-full" aria-label="Minimum carbon tax rate in euros per tonne CO₂e" />
+            <span class="text-gray-400 text-xs" aria-hidden="true">–</span>
+            <input id="rate-max" type="number" min="0" placeholder="Max" class="filter-input w-full" aria-label="Maximum carbon tax rate in euros per tonne CO₂e" />
           </div>
         </div>
 
@@ -72,16 +78,16 @@
         <div>
           <label class="filter-label">GHG Coverage (%)</label>
           <div class="flex items-center gap-2">
-            <input id="cov-min" type="number" min="0" max="100" placeholder="Min" class="filter-input w-full" />
-            <span class="text-gray-400 text-xs">–</span>
-            <input id="cov-max" type="number" min="0" max="100" placeholder="Max" class="filter-input w-full" />
+            <input id="cov-min" type="number" min="0" max="100" placeholder="Min" class="filter-input w-full" aria-label="Minimum GHG emissions coverage percentage" />
+            <span class="text-gray-400 text-xs" aria-hidden="true">–</span>
+            <input id="cov-max" type="number" min="0" max="100" placeholder="Max" class="filter-input w-full" aria-label="Maximum GHG emissions coverage percentage" />
           </div>
         </div>
 
         <!-- Other Carbon Price -->
         <div>
           <label class="filter-label">Other Carbon Price</label>
-          <select id="filter-other-price" class="filter-input w-full">
+          <select id="filter-other-price" class="filter-input w-full" aria-label="Filter by other carbon pricing instrument status">
             <option value="">All</option>
             <option value="No">No</option>
             <option value="Yes, Complementary">Yes, Complementary</option>
@@ -93,9 +99,9 @@
         <div>
           <label class="filter-label">Implementation Year</label>
           <div class="flex items-center gap-2">
-            <input id="year-min" type="number" min="1980" max="2026" placeholder="From" class="filter-input w-full" />
-            <span class="text-gray-400 text-xs">–</span>
-            <input id="year-max" type="number" min="1980" max="2026" placeholder="To" class="filter-input w-full" />
+            <input id="year-min" type="number" min="1980" max="2026" placeholder="From" class="filter-input w-full" aria-label="Implementation year from" />
+            <span class="text-gray-400 text-xs" aria-hidden="true">–</span>
+            <input id="year-max" type="number" min="1980" max="2026" placeholder="To" class="filter-input w-full" aria-label="Implementation year to" />
           </div>
         </div>
 
@@ -140,7 +146,7 @@
             <p class="chart-subtitle">Sorted highest to lowest · €/t CO₂e · 2026</p>
           </div>
         </div>
-        <div class="chart-body" style="height:320px"><canvas id="chart-ranking"></canvas></div>
+        <div class="chart-body" style="height:320px"><canvas id="chart-ranking" role="img" aria-label="Horizontal bar chart: carbon tax rate ranking from highest to lowest"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
@@ -149,7 +155,7 @@
             <p class="chart-subtitle">Share of jurisdiction's GHG emissions covered · 2025</p>
           </div>
         </div>
-        <div class="chart-body" style="height:320px"><canvas id="chart-coverage"></canvas></div>
+        <div class="chart-body" style="height:320px"><canvas id="chart-coverage" role="img" aria-label="Horizontal bar chart: GHG emissions coverage comparison across jurisdictions"></canvas></div>
       </div>
     </div>
 
@@ -162,7 +168,7 @@
             <p class="chart-subtitle">Associative view only — not evidence of causation</p>
           </div>
         </div>
-        <div class="chart-body" style="height:320px"><canvas id="chart-scatter"></canvas></div>
+        <div class="chart-body" style="height:320px"><canvas id="chart-scatter" role="img" aria-label="Scatter plot: carbon tax rate versus GHG emissions coverage"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
@@ -171,7 +177,7 @@
             <p class="chart-subtitle">Number of jurisdictions by year carbon tax entered into force</p>
           </div>
         </div>
-        <div class="chart-body" style="height:320px"><canvas id="chart-timeline"></canvas></div>
+        <div class="chart-body" style="height:320px"><canvas id="chart-timeline" role="img" aria-label="Bar chart: number of jurisdictions implementing carbon tax by year"></canvas></div>
       </div>
     </div>
 
@@ -184,7 +190,7 @@
             <p class="chart-subtitle">Status of co-existing pricing mechanisms per jurisdiction</p>
           </div>
         </div>
-        <div class="chart-body flex items-center justify-center" style="height:300px"><canvas id="chart-donut"></canvas></div>
+        <div class="chart-body flex items-center justify-center" style="height:300px"><canvas id="chart-donut" role="img" aria-label="Doughnut chart: distribution of other carbon pricing instrument status"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="chart-header">
@@ -193,7 +199,7 @@
             <p class="chart-subtitle">Measures revenue efficiency relative to theoretical maximum · 0–1 scale · shown only where ratio &gt; 0</p>
           </div>
         </div>
-        <div class="chart-body" style="height:300px"><canvas id="chart-efficiency"></canvas></div>
+        <div class="chart-body" style="height:300px"><canvas id="chart-efficiency" role="img" aria-label="Horizontal bar chart: adjusted C-efficiency ratio by jurisdiction (2023)"></canvas></div>
       </div>
     </div>
 
@@ -202,9 +208,9 @@
       <div class="chart-header flex-wrap gap-2">
         <div>
           <h3 class="chart-title">Jurisdiction Data Table</h3>
-          <p class="chart-subtitle">Click column headers to sort · Use search to filter</p>
+          <p class="chart-subtitle">Click column headers to sort · Search below filters table rows only (does not affect KPIs or charts)</p>
         </div>
-        <input id="table-search" type="text" placeholder="Search jurisdictions…" class="filter-input w-full sm:w-56 mt-1 sm:mt-0" />
+        <input id="table-search" type="text" placeholder="Search table rows…" class="filter-input w-full sm:w-56 mt-1 sm:mt-0" aria-label="Search table rows by jurisdiction name (does not affect KPIs or charts)" />
       </div>
       <div class="overflow-x-auto">
         <table class="data-table w-full text-sm">
@@ -235,9 +241,9 @@
         <li><strong>Adjusted C-efficiency Ratio (2023):</strong> Measures how efficiently the carbon tax raises revenue relative to the theoretical maximum from taxing all GHG emissions at the full rate. A published value of 0 may reflect no data available for 2023, not necessarily zero efficiency.</li>
         <li><strong>Other Carbon Price:</strong> "Complementary" = another pricing instrument (e.g. EU ETS) covers separate emissions sectors in parallel. "Supplementary" = it fills coverage gaps left by the carbon tax.</li>
         <li><strong>EU ETS</strong> is shown as a reference benchmark only and is excluded from all KPI and chart calculations.</li>
-        <li><strong>KPI averages</strong> are computed only over the jurisdictions currently visible after filters. Averages are not shown when fewer than 2 jurisdictions are selected.</li>
+        <li><strong>KPI averages</strong> are computed only over the jurisdictions currently visible after filters. Averages (Avg Tax Rate, Avg GHG Coverage) are not shown when fewer than 2 jurisdictions are selected, as a single-jurisdiction average has no comparative meaning.</li>
         <li><strong>Scatter plot</strong> shows association between tax rate and coverage — not causation. High tax rates do not necessarily reduce emissions or indicate more effective policy.</li>
-        <li><strong>C-efficiency chart</strong> only plots jurisdictions where ratio &gt; 0 (11 of 24 have a non-zero published value).</li>
+        <li><strong>C-efficiency chart</strong> only plots jurisdictions where ratio &gt; 0 (18 of 24 have a non-zero published value for 2023; the remaining 6 have no published 2023 figure available).</li>
       </ul>
     </section>
 

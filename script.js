@@ -57,6 +57,11 @@ let sortDir = "desc";
 /* ============================================================
    1. DATA LOADING
    ============================================================ */
+function hideLoadingOverlay() {
+  const overlay = document.getElementById("loading-overlay");
+  if (overlay) overlay.remove();
+}
+
 async function fetchData() {
   try {
     const resp = await fetch("data.json");
@@ -66,7 +71,9 @@ async function fetchData() {
     euEtsRef = json.eu_ets_reference;
     buildJurisdictionDropdown();
     applyFilters();
+    hideLoadingOverlay();
   } catch (err) {
+    hideLoadingOverlay();
     document.querySelector("main").innerHTML =
       `<div class="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 text-sm">
         <strong>Failed to load data.json:</strong> ${err.message}<br/>
@@ -126,6 +133,7 @@ function renderKPIs() {
   document.getElementById("kpi-count").textContent = n;
 
   if (n < 1) {
+    // Nothing selected at all — blank all derived KPIs
     document.getElementById("kpi-avg-rate").textContent     = "—";
     document.getElementById("kpi-avg-cov").textContent      = "—";
     document.getElementById("kpi-other-price").textContent  = "—";
@@ -134,22 +142,27 @@ function renderKPIs() {
   }
 
   // Avg tax rate (EUR only)
-  const avgRate = filteredData.reduce((s, d) => s + d.carbon_tax_rate_eur, 0) / n;
-  document.getElementById("kpi-avg-rate").textContent = "€" + fmt(avgRate);
+  // Methodology: averages not shown when n < 2 (single jurisdiction has no meaningful average)
+  if (n < 2) {
+    document.getElementById("kpi-avg-rate").textContent = "—";
+    document.getElementById("kpi-avg-cov").textContent  = "—";
+  } else {
+    const avgRate = filteredData.reduce((s, d) => s + d.carbon_tax_rate_eur, 0) / n;
+    document.getElementById("kpi-avg-rate").textContent = "€" + fmt(avgRate);
 
-  // Avg GHG coverage
-  const avgCov = filteredData.reduce((s, d) => s + d.ghg_coverage_pct, 0) / n;
-  document.getElementById("kpi-avg-cov").textContent = fmt(avgCov, 1) + "%";
+    const avgCov = filteredData.reduce((s, d) => s + d.ghg_coverage_pct, 0) / n;
+    document.getElementById("kpi-avg-cov").textContent = fmt(avgCov, 1) + "%";
+  }
 
-  // Count with other instrument
+  // Count with other instrument (shown for any n ≥ 1)
   const withOther = filteredData.filter(d => d.other_carbon_price_active !== "No").length;
   document.getElementById("kpi-other-price").textContent = withOther;
 
-  // Year range
+  // Year range (shown for any n ≥ 1)
   const years = filteredData.map(d => d.year_of_implementation);
   const minY = Math.min(...years);
   const maxY = Math.max(...years);
-  document.getElementById("kpi-year-range").textContent = minY === maxY ? minY : minY + "–" + maxY;
+  document.getElementById("kpi-year-range").textContent = minY === maxY ? String(minY) : minY + "–" + maxY;
 }
 
 /* ============================================================
@@ -162,13 +175,33 @@ function destroyChart(id) {
   }
 }
 
+// ---- Helper: draw "no data" message on a canvas ----
+function drawEmptyState(canvas, message) {
+  const ctx = canvas.getContext("2d");
+  // Use parent's layout dimensions if canvas hasn't been sized yet by Chart.js
+  const w = canvas.offsetWidth  || canvas.parentElement.clientWidth  || 300;
+  const h = canvas.offsetHeight || canvas.parentElement.clientHeight || 200;
+  canvas.width  = w;
+  canvas.height = h;
+  ctx.clearRect(0, 0, w, h);
+  ctx.font = '13px -apple-system, "Segoe UI", system-ui, sans-serif';
+  ctx.fillStyle = "#9ca3af";
+  ctx.textAlign = "center";
+  ctx.fillText(message, w / 2, h / 2);
+}
+
 // ---- 4a. Carbon Tax Rate Ranking (horizontal bar) ----
 function renderRanking() {
   destroyChart("ranking");
+  const canvas = document.getElementById("chart-ranking");
+  if (filteredData.length === 0) {
+    drawEmptyState(canvas, "No jurisdictions match the current filters.");
+    return;
+  }
   const sorted = [...filteredData].sort((a, b) => b.carbon_tax_rate_eur - a.carbon_tax_rate_eur);
   const labels = sorted.map(d => d.name);
   const values = sorted.map(d => d.carbon_tax_rate_eur);
-  const ctx = document.getElementById("chart-ranking").getContext("2d");
+  const ctx = canvas.getContext("2d");
 
   // Inline plugin: draw EU ETS reference vertical line without annotation plugin
   const euEtsLinePlugin = {
@@ -254,8 +287,13 @@ function renderRanking() {
 // ---- 4b. Emissions Coverage (horizontal bar) ----
 function renderCoverage() {
   destroyChart("coverage");
+  const canvas = document.getElementById("chart-coverage");
+  if (filteredData.length === 0) {
+    drawEmptyState(canvas, "No jurisdictions match the current filters.");
+    return;
+  }
   const sorted = [...filteredData].sort((a, b) => b.ghg_coverage_pct - a.ghg_coverage_pct);
-  const ctx = document.getElementById("chart-coverage").getContext("2d");
+  const ctx = canvas.getContext("2d");
 
   chartInstances["coverage"] = new Chart(ctx, {
     type: "bar",
@@ -301,7 +339,12 @@ function renderCoverage() {
 // ---- 4c. Scatter: Tax Rate vs Coverage ----
 function renderScatter() {
   destroyChart("scatter");
-  const ctx = document.getElementById("chart-scatter").getContext("2d");
+  const canvas = document.getElementById("chart-scatter");
+  if (filteredData.length === 0) {
+    drawEmptyState(canvas, "No jurisdictions match the current filters.");
+    return;
+  }
+  const ctx = canvas.getContext("2d");
   const points = filteredData.map(d => ({
     x: d.carbon_tax_rate_eur,
     y: d.ghg_coverage_pct,
@@ -351,17 +394,25 @@ function renderScatter() {
       }
     },
     plugins: [{
-      // Draw jurisdiction labels next to points
+      // Draw jurisdiction labels next to points; flip alignment near right edge
       id: "scatterLabels",
       afterDatasetsDraw(chart) {
-        const { ctx: c, data, scales: { x, y } } = chart;
+        const { ctx: c, data, scales: { x, y }, chartArea } = chart;
         c.save();
-        c.font = "10px -apple-system, Segoe UI, sans-serif";
+        c.font = '10px -apple-system, "Segoe UI", system-ui, sans-serif';
         c.fillStyle = "#374151";
-        data.datasets[0].data.forEach((pt, i) => {
+        data.datasets[0].data.forEach((pt) => {
           const px = x.getPixelForValue(pt.x);
           const py = y.getPixelForValue(pt.y);
-          c.fillText(pt.label, px + 9, py + 3);
+          const labelWidth = c.measureText(pt.label).width;
+          // If near right edge, draw label to the left of the point
+          if (px + 9 + labelWidth > chartArea.right) {
+            c.textAlign = "right";
+            c.fillText(pt.label, px - 10, py + 3);
+          } else {
+            c.textAlign = "left";
+            c.fillText(pt.label, px + 9, py + 3);
+          }
         });
         c.restore();
       }
@@ -372,12 +423,17 @@ function renderScatter() {
 // ---- 4d. Implementation Timeline (bar) ----
 function renderTimeline() {
   destroyChart("timeline");
+  const canvas = document.getElementById("chart-timeline");
+  if (filteredData.length === 0) {
+    drawEmptyState(canvas, "No jurisdictions match the current filters.");
+    return;
+  }
   const counts = {};
   filteredData.forEach(d => {
     counts[d.year_of_implementation] = (counts[d.year_of_implementation] || 0) + 1;
   });
   const years = Object.keys(counts).sort();
-  const ctx = document.getElementById("chart-timeline").getContext("2d");
+  const ctx = canvas.getContext("2d");
 
   chartInstances["timeline"] = new Chart(ctx, {
     type: "bar",
@@ -424,10 +480,15 @@ function renderTimeline() {
 // ---- 4e. Other Carbon Pricing Instruments (doughnut) ----
 function renderDonut() {
   destroyChart("donut");
+  const canvas = document.getElementById("chart-donut");
+  if (filteredData.length === 0) {
+    drawEmptyState(canvas, "No jurisdictions match the current filters.");
+    return;
+  }
   const countNo   = filteredData.filter(d => d.other_carbon_price_active === "No").length;
   const countComp = filteredData.filter(d => d.other_carbon_price_active === "Yes, Complementary").length;
   const countSupp = filteredData.filter(d => d.other_carbon_price_active === "Yes, Supplementary").length;
-  const ctx = document.getElementById("chart-donut").getContext("2d");
+  const ctx = canvas.getContext("2d");
 
   chartInstances["donut"] = new Chart(ctx, {
     type: "doughnut",
@@ -653,15 +714,21 @@ function updateDropdownLabel() {
       : `${sel.length} selected`;
 }
 
-// Toggle dropdown open/close
+// Toggle dropdown open/close — also sync aria-expanded
 document.getElementById("jur-dropdown-btn").addEventListener("click", e => {
   e.stopPropagation();
-  document.getElementById("jur-dropdown").classList.toggle("hidden");
+  const dd = document.getElementById("jur-dropdown");
+  const btn = document.getElementById("jur-dropdown-btn");
+  const isOpen = !dd.classList.contains("hidden");
+  dd.classList.toggle("hidden");
+  btn.setAttribute("aria-expanded", String(!isOpen));
 });
 document.addEventListener("click", e => {
   const dd = document.getElementById("jur-dropdown");
+  const btn = document.getElementById("jur-dropdown-btn");
   if (!dd.classList.contains("hidden") && !dd.contains(e.target) && e.target.id !== "jur-dropdown-btn") {
     dd.classList.add("hidden");
+    btn.setAttribute("aria-expanded", "false");
   }
 });
 
@@ -684,6 +751,11 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   });
   document.getElementById("filter-other-price").value = "";
   document.getElementById("table-search").value = "";
+  document.getElementById("jur-search").value = "";
+  // Restore all hidden items in the dropdown (jur-search may have hidden some)
+  document.querySelectorAll(".jur-checkbox-item").forEach(item => {
+    item.style.display = "";
+  });
   tableSearchQuery = "";
   document.querySelectorAll(".jur-cb").forEach(cb => cb.checked = false);
   updateDropdownLabel();

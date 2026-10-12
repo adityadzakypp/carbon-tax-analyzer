@@ -42,10 +42,16 @@
   cursor: pointer;
 }
 .filter-btn:focus,
+.filter-btn:focus-visible,
 .filter-btn:hover {
   border-color: #10b981;
   box-shadow: 0 0 0 2px rgba(16,185,129,0.15);
   background: #fff;
+}
+/* Ensure keyboard-focused filter button has visible ring */
+.filter-btn:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 1px;
 }
 
 /* ---------- Jurisdiction dropdown ---------- */
@@ -195,6 +201,30 @@
 
 /* ---------- EU ETS reference bar in ranking ---------- */
 .ets-ref-line { stroke: #f59e0b; stroke-dasharray: 5,4; }
+
+/* ---------- Loading skeleton for initial page load ---------- */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(249,250,251,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-size: 0.85rem;
+  color: #6b7280;
+  gap: 0.5rem;
+}
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- Scrollbar (webkit) ---------- */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
