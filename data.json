@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "title": "Carbon Taxes in Europe, 2026",
+    "source": "Tax Foundation Europe",
+    "observation_year": 2026,
+    "currency_primary": "EUR",
+    "currency_secondary": "USD",
+    "notes": [
+      "Carbon Tax Rate (EUR/USD): rate per tonne of CO2-equivalent as of 2026.",
+      "Share of GHG Emissions Covered: percentage of the jurisdiction's total greenhouse gas emissions subject to the carbon tax.",
+      "Adjusted C-efficiency ratio (2023): measures how efficiently the carbon tax covers the theoretical maximum revenue; ranges 0–1. A value of 0 may indicate no available or published data for 2023.",
+      "Other Carbon Price Active: indicates whether another carbon pricing instrument (e.g. EU ETS) is active alongside the carbon tax — Complementary (both operate in parallel), Supplementary (the other instrument fills coverage gaps), or No.",
+      "Year of Implementation: year the carbon tax entered into force.",
+      "EU ETS is provided as a reference/comparison only and is NOT included in jurisdiction-level calculations.",
+      "Dataset average row (no jurisdiction label) is excluded from individual analysis."
+    ]
+  },
+  "dataset_average": {
+    "carbon_tax_rate_eur": 53.63,
+    "carbon_tax_rate_usd": 62.24,
+    "ghg_coverage_pct": 42,
+    "adjusted_c_efficiency_ratio_2023": 0.12
+  },
+  "eu_ets_reference": {
+    "label": "EU ETS (for comparison)",
+    "carbon_tax_rate_eur": 73.15,
+    "carbon_tax_rate_usd": 84.89,
+    "ghg_coverage_pct": 40,
+    "year_of_implementation": 2005
+  },
+  "jurisdictions": [
+    {
+      "id": "AL",
+      "name": "Albania",
+      "label": "Albania (AL)",
+      "carbon_tax_rate_eur": 14.59,
+      "carbon_tax_rate_usd": 16.93,
+      "ghg_coverage_pct": 73,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "No",
+      "year_of_implementation": 2022
+    },
+    {
+      "id": "AD",
+      "name": "Andorra",
+      "label": "Andorra (AD)",
+      "carbon_tax_rate_eur": 30.00,
+      "carbon_tax_rate_usd": 34.82,
+      "ghg_coverage_pct": 95,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "No",
+      "year_of_implementation": 2022
+    },
+    {
+      "id": "AT",
+      "name": "Austria",
+      "label": "Austria (AT)",
+      "carbon_tax_rate_eur": 55.00,
+      "carbon_tax_rate_usd": 63.83,
+      "ghg_coverage_pct": 36,
+      "adjusted_c_efficiency_ratio_2023": 0.53,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2022
+    },
+    {
+      "id": "DK",
+      "name": "Denmark",
+      "label": "Denmark (DK)",
+      "carbon_tax_rate_eur": 100.37,
+      "carbon_tax_rate_usd": 116.48,
+      "ghg_coverage_pct": 64,
+      "adjusted_c_efficiency_ratio_2023": 0.55,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1992
+    },
+    {
+      "id": "EE",
+      "name": "Estonia",
+      "label": "Estonia (EE)",
+      "carbon_tax_rate_eur": 2.00,
+      "carbon_tax_rate_usd": 2.32,
+      "ghg_coverage_pct": 10,
+      "adjusted_c_efficiency_ratio_2023": 0.09,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2000
+    },
+    {
+      "id": "FI",
+      "name": "Finland",
+      "label": "Finland (FI)",
+      "carbon_tax_rate_eur": 51.30,
+      "carbon_tax_rate_usd": 59.53,
+      "ghg_coverage_pct": 45,
+      "adjusted_c_efficiency_ratio_2023": 0.60,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1990
+    },
+    {
+      "id": "FR",
+      "name": "France",
+      "label": "France (FR)",
+      "carbon_tax_rate_eur": 44.60,
+      "carbon_tax_rate_usd": 51.76,
+      "ghg_coverage_pct": 41,
+      "adjusted_c_efficiency_ratio_2023": 0.55,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2014
+    },
+    {
+      "id": "HU",
+      "name": "Hungary",
+      "label": "Hungary (HU)",
+      "carbon_tax_rate_eur": 36.00,
+      "carbon_tax_rate_usd": 41.78,
+      "ghg_coverage_pct": 32,
+      "adjusted_c_efficiency_ratio_2023": 0.72,
+      "other_carbon_price_active": "Yes, Supplementary",
+      "year_of_implementation": 2023
+    },
+    {
+      "id": "IS",
+      "name": "Iceland",
+      "label": "Iceland (IS)",
+      "carbon_tax_rate_eur": 70.84,
+      "carbon_tax_rate_usd": 82.21,
+      "ghg_coverage_pct": 37,
+      "adjusted_c_efficiency_ratio_2023": 0.06,
+      "other_carbon_price_active": "Yes, Supplementary",
+      "year_of_implementation": 2010
+    },
+    {
+      "id": "IE",
+      "name": "Ireland",
+      "label": "Ireland (IE)",
+      "carbon_tax_rate_eur": 63.50,
+      "carbon_tax_rate_usd": 73.69,
+      "ghg_coverage_pct": 34,
+      "adjusted_c_efficiency_ratio_2023": 0.61,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2010
+    },
+    {
+      "id": "LV",
+      "name": "Latvia",
+      "label": "Latvia (LV)",
+      "carbon_tax_rate_eur": 15.00,
+      "carbon_tax_rate_usd": 17.41,
+      "ghg_coverage_pct": 2,
+      "adjusted_c_efficiency_ratio_2023": 0.42,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2004
+    },
+    {
+      "id": "LI",
+      "name": "Liechtenstein",
+      "label": "Liechtenstein (LI)",
+      "carbon_tax_rate_eur": 129.09,
+      "carbon_tax_rate_usd": 149.81,
+      "ghg_coverage_pct": 72,
+      "adjusted_c_efficiency_ratio_2023": 0.05,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2008
+    },
+    {
+      "id": "LU",
+      "name": "Luxembourg",
+      "label": "Luxembourg (LU)",
+      "carbon_tax_rate_eur": 40.00,
+      "carbon_tax_rate_usd": 46.42,
+      "ghg_coverage_pct": 72,
+      "adjusted_c_efficiency_ratio_2023": 0.23,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2021
+    },
+    {
+      "id": "NL",
+      "name": "Netherlands",
+      "label": "Netherlands (NL)",
+      "carbon_tax_rate_eur": 87.90,
+      "carbon_tax_rate_usd": 102.01,
+      "ghg_coverage_pct": 45,
+      "adjusted_c_efficiency_ratio_2023": 0.88,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2021
+    },
+    {
+      "id": "NO",
+      "name": "Norway",
+      "label": "Norway (NO)",
+      "carbon_tax_rate_eur": 146.23,
+      "carbon_tax_rate_usd": 169.71,
+      "ghg_coverage_pct": 65,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1991
+    },
+    {
+      "id": "PL",
+      "name": "Poland",
+      "label": "Poland (PL)",
+      "carbon_tax_rate_eur": 0.09,
+      "carbon_tax_rate_usd": 0.11,
+      "ghg_coverage_pct": 24,
+      "adjusted_c_efficiency_ratio_2023": 0.45,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1990
+    },
+    {
+      "id": "PT",
+      "name": "Portugal",
+      "label": "Portugal (PT)",
+      "carbon_tax_rate_eur": 67.39,
+      "carbon_tax_rate_usd": 78.21,
+      "ghg_coverage_pct": 40,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2015
+    },
+    {
+      "id": "RS",
+      "name": "Serbia",
+      "label": "Serbia (RS)",
+      "carbon_tax_rate_eur": 4.00,
+      "carbon_tax_rate_usd": 4.64,
+      "ghg_coverage_pct": 55,
+      "adjusted_c_efficiency_ratio_2023": 0.03,
+      "other_carbon_price_active": "No",
+      "year_of_implementation": 2026
+    },
+    {
+      "id": "SI",
+      "name": "Slovenia",
+      "label": "Slovenia (SI)",
+      "carbon_tax_rate_eur": 30.85,
+      "carbon_tax_rate_usd": 35.80,
+      "ghg_coverage_pct": 46,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1996
+    },
+    {
+      "id": "ES",
+      "name": "Spain",
+      "label": "Spain (ES)",
+      "carbon_tax_rate_eur": 15.00,
+      "carbon_tax_rate_usd": 17.41,
+      "ghg_coverage_pct": 2,
+      "adjusted_c_efficiency_ratio_2023": 0,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2014
+    },
+    {
+      "id": "SE",
+      "name": "Sweden",
+      "label": "Sweden (SE)",
+      "carbon_tax_rate_eur": 133.17,
+      "carbon_tax_rate_usd": 154.55,
+      "ghg_coverage_pct": 40,
+      "adjusted_c_efficiency_ratio_2023": 0.03,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 1991
+    },
+    {
+      "id": "CH",
+      "name": "Switzerland",
+      "label": "Switzerland (CH)",
+      "carbon_tax_rate_eur": 129.09,
+      "carbon_tax_rate_usd": 149.81,
+      "ghg_coverage_pct": 38,
+      "adjusted_c_efficiency_ratio_2023": 0.47,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2008
+    },
+    {
+      "id": "UA",
+      "name": "Ukraine",
+      "label": "Ukraine (UA)",
+      "carbon_tax_rate_eur": 0.59,
+      "carbon_tax_rate_usd": 0.68,
+      "ghg_coverage_pct": 32,
+      "adjusted_c_efficiency_ratio_2023": 0.23,
+      "other_carbon_price_active": "No",
+      "year_of_implementation": 2011
+    },
+    {
+      "id": "GB",
+      "name": "United Kingdom",
+      "label": "United Kingdom (GB)",
+      "carbon_tax_rate_eur": 20.63,
+      "carbon_tax_rate_usd": 23.94,
+      "ghg_coverage_pct": 10,
+      "adjusted_c_efficiency_ratio_2023": 0.48,
+      "other_carbon_price_active": "Yes, Complementary",
+      "year_of_implementation": 2013
+    }
+  ]
+}
